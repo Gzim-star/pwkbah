@@ -6,44 +6,38 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<!-- Pixel Font -->
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
 <style>
 html, body { height: 100%; margin: 0; }
 body {
   display: grid;
-  place-items: center;          /* immer exakt mittig */
-  background: #000000;
+  place-items: center;
+  background: #000;
   color: white;
   font-family: Arial, sans-serif;
   text-align: center;
-  overflow-x: hidden;           /* kein seitliches Rutschen */
+  overflow-x: hidden;
 }
 
 #gameContainer {
   width: 90%;
   max-width: 700px;
   padding: 20px;
-  background: #000000;
+  background: #000;
   border-radius: 15px;
   box-shadow: 0 0 25px rgba(255,255,255,0.08);
-  box-sizing: border-box;       /* stabil */
+  box-sizing: border-box;
 }
 
 h1 {
   font-size: 1.8em;
   margin-bottom: 20px;
   color: #4dd0e1;
-  font-family: 'Press Start 2P', cursive;
 }
 
 #task {
   font-size: 1.4em;
   margin: 20px 0;
   min-height: 50px;
-  font-family: 'Press Start 2P', cursive;
-  word-break: keep-all;         /* keine Hyphen */
 }
 
 #inputContainer {
@@ -80,6 +74,17 @@ button:hover { background: #4caf50; }
 #message { margin-top: 20px; font-size: 1em; min-height: 40px; }
 #score { margin-top: 15px; font-size: 1em; color: #ffeb3b; }
 
+#timer {
+  margin-top: 10px;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+/* Timer Farben */
+.timer-green { color: #4caf50; }
+.timer-yellow { color: #ffc107; }
+.timer-red { color: #f44336; }
+
 @media (max-width: 768px) {
   h1 { font-size: 1.4em; }
   #task { font-size: 1.2em; }
@@ -95,6 +100,7 @@ button:hover { background: #4caf50; }
   <h1>🧮</h1>
 
   <div id="task">Loading...</div>
+  <div id="timer" class="timer-green">Time left: 6s</div>
 
   <div id="inputContainer">
     <input id="answer" type="number" placeholder="Your answer" autofocus>
@@ -106,19 +112,22 @@ button:hover { background: #4caf50; }
 </div>
 
 <script>
-// 🔒 Brain-Test Game Original by Gëzim Hasani
-const gameID = "2025-GH-BC01";
-const gameVersion = "1.0.0";
-const creationDate = "2025-12-14";
-
 let correctAnswer = 0;
 let score = 0;
+let timer = 6;
+let timerInterval;
+
+const timerDiv = document.getElementById("timer");
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function generateTask() {
+  clearInterval(timerInterval);
+  timer = 6;
+  updateTimerUI();
+
   const pattern = randomInt(1, 3);
   let a, b, c, text;
 
@@ -128,17 +137,13 @@ function generateTask() {
     c = randomInt(5, 40);
     correctAnswer = (a * b) - c;
     text = `(${a} × ${b}) − ${c}`;
-  }
-
-  if (pattern === 2) {
+  } else if (pattern === 2) {
     a = randomInt(10, 40);
     b = randomInt(5, 30);
     c = randomInt(2, 8);
     correctAnswer = (a + b) * c;
     text = `(${a} + ${b}) × ${c}`;
-  }
-
-  if (pattern === 3) {
+  } else if (pattern === 3) {
     c = randomInt(2, 6);
     correctAnswer = randomInt(5, 20);
     b = randomInt(5, 30);
@@ -149,13 +154,42 @@ function generateTask() {
   document.getElementById("task").textContent = `${text} = `;
   document.getElementById("answer").value = "";
   document.getElementById("answer").focus();
+  document.getElementById("message").textContent = "";
+
+  startTimer();
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  updateTimerUI();
+
+  timerInterval = setInterval(() => {
+    timer--;
+    updateTimerUI();
+
+    if (timer <= 0) {
+      clearInterval(timerInterval);
+      document.getElementById("message").textContent = `⏱ Time's up! Correct was ${correctAnswer}`;
+      setTimeout(generateTask, 1000);
+    }
+  }, 1000);
+}
+
+function updateTimerUI() {
+  timerDiv.textContent = `Time left: ${timer}s`;
+  timerDiv.className = '';
+
+  if (timer >= 4) timerDiv.classList.add('timer-green');
+  else if (timer >= 2) timerDiv.classList.add('timer-yellow');
+  else timerDiv.classList.add('timer-red');
 }
 
 function checkAnswer() {
   const input = document.getElementById("answer");
   const message = document.getElementById("message");
+  if (!input.value) return;
 
-  if (input.value === "") return;
+  clearInterval(timerInterval);
 
   if (Number(input.value) === correctAnswer) {
     score++;
@@ -165,10 +199,7 @@ function checkAnswer() {
     message.textContent = `❌ Wrong! Correct was ${correctAnswer}`;
   }
 
-  setTimeout(() => {
-    message.textContent = "";
-    generateTask();
-  }, 700);
+  setTimeout(generateTask, 700);
 }
 
 generateTask();
