@@ -207,20 +207,47 @@ function startTimer(){clearInterval(timerInterval); timer=6; updateTimerUI(); ti
 
 function updateTimerUI(){const div=document.getElementById('timer'); div.textContent=`⏳ Time left: ${timer}`; div.className=''; if(timer>=4) div.classList.add('timer-green'); else if(timer>=2) div.classList.add('timer-yellow'); else div.classList.add('timer-red');}
 
-function playerMove(index){if(board[index]!=='') return; board[index]='X'; clearInterval(timerInterval); renderBoard(); if(checkWinner('X')){gameOver=true; ticScore.player++; document.getElementById('message').textContent="You win! 🎉"; updateScore(); if(ticScore.player>=3){setTimeout(startMathChallenge,800);} return;} if(board.every(c=>c!=='')){gameOver=true; ticScore.draw++; updateScore(); return;} setTimeout(aiMove,400);}
+function playerMove(index){
+  if(board[index]!=='') return;
+  board[index]='X';
+  clearInterval(timerInterval);
+  renderBoard();
+  if(checkWinner('X')){
+    gameOver=true; ticScore.player++; document.getElementById('message').textContent="You win! 🎉"; updateScore();
+    if(ticScore.player>=3){ setTimeout(startMathChallenge,800); } else { setTimeout(resetBoard,800); }
+    return;
+  }
+  if(board.every(c=>c!=='')){ gameOver=true; ticScore.draw++; updateScore(); setTimeout(resetBoard,800); return; }
+  setTimeout(aiMove,400);
+}
 
-function aiMove(){if(gameOver) return; const level=document.getElementById('levelSelect').value; let move;if(level==='easy') move=randomMove(); else if(level==='medium') move=mediumMove(); else move=hardMove(); board[move]='O'; renderBoard(); if(checkWinner('O')){gameOver=true; ticScore.ai++; document.getElementById('message').textContent="AI wins! 🤖"; updateScore(); return;} if(board.every(c=>c!=='')){gameOver=true; ticScore.draw++; updateScore(); return;} startTimer();}
+function aiMove(){
+  if(gameOver) return;
+  const level=document.getElementById('levelSelect').value;
+  let move;if(level==='easy') move=randomMove(); else if(level==='medium') move=mediumMove(); else move=hardMove();
+  board[move]='O'; renderBoard();
+  if(checkWinner('O')){
+    gameOver=true; ticScore.ai++; document.getElementById('message').textContent="AI wins! 🤖"; updateScore();
+    if(ticScore.ai>=3){ setTimeout(startMathChallenge,800); } else { setTimeout(resetBoard,800); }
+    return;
+  }
+  if(board.every(c=>c!=='')){ gameOver=true; ticScore.draw++; updateScore(); setTimeout(resetBoard,800); return; }
+  startTimer();
+}
+
+function resetBoard(){
+  board=['','','','','','','','',''];
+  gameOver=false;
+  document.getElementById('message').textContent='';
+  renderBoard();
+  startTimer();
+}
 
 function randomMove(){const empty=board.map((v,i)=>v===''?i:null).filter(v=>v!==null); return empty[Math.floor(Math.random()*empty.length)];}
-
 function mediumMove(){for(let i=0;i<9;i++){if(board[i]===''){board[i]='O'; if(checkWinner('O')) return i; board[i]='';}} for(let i=0;i<9;i++){if(board[i]===''){board[i]='X'; if(checkWinner('X')){board[i]=''; return i;} board[i]='';}} if(board[4]==='') return 4; const corners=[0,2,6,8].filter(i=>board[i]===''); if(corners.length) return corners[Math.floor(Math.random()*corners.length)]; return randomMove();}
-
 function hardMove(){let bestScore=-Infinity; let move; for(let i=0;i<9;i++){if(board[i]===''){board[i]='O'; let score=minimax(board,0,false); board[i]=''; if(score>bestScore){bestScore=score; move=i;}}} return move;}
-
 function minimax(b,depth,isMax){if(checkWinner('O')) return 10-depth; if(checkWinner('X')) return depth-10; if(b.every(c=>c!=='')) return 0; if(isMax){let best=-Infinity; for(let i=0;i<9;i++){if(b[i]===''){b[i]='O'; best=Math.max(best,minimax(b,depth+1,false)); b[i]='';}} return best;} else{let best=Infinity; for(let i=0;i<9;i++){if(b[i]===''){b[i]='X'; best=Math.min(best,minimax(b,depth+1,true)); b[i]='';}} return best;}}
-
 function checkWinner(p){const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]; return wins.some(w=>w.every(i=>board[i]===p));}
-
 function updateScore(){document.getElementById('scoreboard').textContent=`Player: ${ticScore.player} | AI: ${ticScore.ai} | Draws: ${ticScore.draw}`;}
 
 // ===== MATH CHALLENGE =====
@@ -262,4 +289,4 @@ function checkAnswer(){
 }
 </script>
 </body>
-</html>
+</html>p
