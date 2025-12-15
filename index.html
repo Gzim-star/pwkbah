@@ -11,15 +11,20 @@
 html, body {
   height: 100%;
   margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background: #000;
   color: white;
   font-family: Arial, sans-serif;
   text-align: center;
+  overflow: hidden; /* verhindert Springen */
 }
 
+/* 🔒 Fester Center-Wrapper */
+body {
+  display: grid;
+  place-items: center; /* immer exakt mittig */
+}
+
+/* 🟦 GAME CONTAINER */
 #gameContainer {
   width: 90%;
   max-width: 700px;
@@ -27,6 +32,11 @@ html, body {
   background: #000;
   border-radius: 18px;
   box-shadow: 0 0 25px rgba(255,255,255,0.1);
+  box-sizing: border-box; /* stabil */
+  position: fixed; /* FIXIERT in der Mitte */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* wirklich mittig */
 }
 
 h1 {
@@ -40,6 +50,7 @@ h1 {
   font-family: 'Press Start 2P', cursive;
   font-size: 1.4em;
   margin: 25px 0;
+  word-break: keep-all; /* keine Hyphen */
 }
 
 #inputContainer {
@@ -67,6 +78,7 @@ button {
   background: #2e7d32;
   color: white;
   cursor: pointer;
+  transition: all 0.2s;
 }
 
 button:hover {
@@ -126,7 +138,6 @@ function generateTask() {
   let a, b, c, text;
 
   if (pattern === 1) {
-    // (a × b) − c
     a = randomInt(6, 20);
     b = randomInt(4, 15);
     c = randomInt(5, 40);
@@ -135,7 +146,6 @@ function generateTask() {
   }
 
   if (pattern === 2) {
-    // (a + b) × c
     a = randomInt(10, 40);
     b = randomInt(5, 30);
     c = randomInt(2, 8);
@@ -144,7 +154,6 @@ function generateTask() {
   }
 
   if (pattern === 3) {
-    // (a − b) ÷ c
     c = randomInt(2, 6);
     correctAnswer = randomInt(5, 20);
     b = randomInt(5, 30);
