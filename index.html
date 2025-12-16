@@ -118,7 +118,6 @@ let mathTimerInterval;
 let board=[];
 let gameOver=false;
 
-// ----------- START WORD CHAIN -----------
 function startWordChain(){
   stage='word';
   const container=document.getElementById('gameContainer');
@@ -178,7 +177,6 @@ function aiTurn(){
   if(wordScore>=6){ setTimeout(startTicTacToe,800);}
 }
 
-// ----------- TIC TAC TOE -----------
 function startTicTacToe(){
   stage='tic tac toe';
   const container=document.getElementById('gameContainer');
@@ -265,7 +263,7 @@ function minimax(b,depth,isMax){if(checkWinner('O')) return 10-depth; if(checkWi
 function checkWinner(p){const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]; return wins.some(w=>w.every(i=>board[i]===p));}
 function updateScore(){document.getElementById('scoreboard').textContent=`Player: ${ticScore.player} | AI: ${ticScore.ai} | Draws: ${ticScore.draw}`;}
 
-// ----------- MATH CHALLENGE -----------
+// MATH CHALLENGE
 function startMathChallenge(){
   stage='math';
   const container=document.getElementById('gameContainer');
@@ -280,32 +278,8 @@ function startMathChallenge(){
     <div id="message"></div>
   `;
   mathTimer=12;
-  startMathTimer();
   generateTask();
-}
-
-function startMathTimer(){
-  clearInterval(mathTimerInterval);
-  mathTimer=12;
-  updateMathTimerUI();
-  mathTimerInterval=setInterval(()=>{
-    mathTimer--;
-    updateMathTimerUI();
-    if(mathTimer<=0){
-      clearInterval(mathTimerInterval);
-      document.getElementById('message').textContent='⏰ Time is up! Restarting game...';
-      setTimeout(startWordChain,1000); // Spiel nur beim Math-Challenge neu starten
-    }
-  },1000);
-}
-
-function updateMathTimerUI(){
-  const div=document.getElementById('timer');
-  div.textContent=`⏳ Time left: ${mathTimer}`;
-  div.className='';
-  if(mathTimer>=8) div.classList.add('timer-green');
-  else if(mathTimer>=4) div.classList.add('timer-yellow');
-  else div.classList.add('timer-red');
+  startMathTimer();
 }
 
 function randomInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
@@ -322,6 +296,24 @@ function generateTask(){
   document.getElementById("message").textContent="";
 }
 
+function startMathTimer(){
+  clearInterval(mathTimerInterval);
+  mathTimerInterval=setInterval(()=>{
+    mathTimer--;
+    const div=document.getElementById("timer");
+    div.textContent=`⏳ Time left: ${mathTimer}`;
+    div.className='';
+    if(mathTimer>=8) div.classList.add('timer-green');
+    else if(mathTimer>=4) div.classList.add('timer-yellow');
+    else div.classList.add('timer-red');
+    if(mathTimer<=0){
+      clearInterval(mathTimerInterval);
+      document.getElementById('message').textContent='⏳ Time up! Restarting game...';
+      setTimeout(restartGame,1000);
+    }
+  },1000);
+}
+
 function checkAnswer(){
   const input=document.getElementById("answer");
   if(input.value==="") return;
@@ -329,14 +321,32 @@ function checkAnswer(){
   if(Number(input.value)===correctAnswer){
     document.getElementById("message").textContent="✅ Correct!";
     setTimeout(()=>{
-      generateTask();
       mathTimer=12;
+      generateTask();
       startMathTimer();
     },700);
   } else {
     document.getElementById('message').textContent='❌ Wrong! Restarting game...';
-    setTimeout(startWordChain,1000); // Spiel nur bei Math-Challenge neu starten
+    setTimeout(restartGame,1000);
   }
+}
+
+// KOMPLETTES SPIEL RESET
+function restartGame(){
+  stage='start';
+  wordScore=0;
+  ticScore={player:0,ai:0,draw:0};
+  currentWord='';
+  usedWords=[];
+  board=[];
+  gameOver=false;
+  clearInterval(timerInterval);
+  clearInterval(mathTimerInterval);
+  const container=document.getElementById('gameContainer');
+  container.innerHTML=`
+    <h1>🧠</h1>
+    <button onclick="startWordChain()">START</button>
+  `;
 }
 </script>
 </body>
