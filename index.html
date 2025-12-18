@@ -5,9 +5,7 @@
 <title>🧠</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
 <style>
-/* ===================== BASIC ===================== */
 html, body { height: 100%; margin: 0; }
 body {
   display: grid; place-items: center;
@@ -20,71 +18,78 @@ body {
   box-shadow: 0 0 25px rgba(255,255,255,0.08);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
-h1 {
-  font-size: 1.8em;
-  margin-bottom: 20px;
-  color: #4dd0e1;
-  font-family: 'Press Start 2P', cursive;
+h1 { font-size: 1.8em; margin-bottom: 20px; color: #4dd0e1; font-family: 'Press Start 2P', cursive; }
+#task, #wordDisplay { font-size: 1.4em; margin: 20px 0; min-height: 50px; font-family: 'Press Start 2P', cursive; }
+#playerWord, #answer {
+  width: 80%; max-width: 400px;
+  padding: 10px; border-radius: 10px;
+  border: none; text-align: center;
 }
+button {
+  padding: 12px 25px;
+  border-radius: 10px;
+  background: #2e7d32;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+button:hover { background: #4caf50; }
+#message { min-height: 40px; margin-top: 15px; }
+#timer { margin-top: 10px; font-weight: bold; }
 
-/* ===================== HELP BUTTON ===================== */
+.timer-green{color:#4caf50}
+.timer-yellow{color:#ffc107}
+.timer-red{color:#f44336}
+
+/* ❓ HELP BUTTON */
 #helpBtn{
-  position:absolute;
-  top:15px; right:15px;
-  width:40px; height:40px;
-  border-radius:50%;
-  background:#4dd0e1;
-  color:black;
-  font-weight:bold;
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  font-size:26px;
+  background:none;
+  border:none;
+  color:white;
   cursor:pointer;
+  z-index:999;
 }
-#helpBox{
+#helpBtn:hover{color:#4dd0e1}
+
+#helpModal{
+  display:none;
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.9);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:99;
+  background:rgba(0,0,0,0.75);
+  z-index:1000;
 }
 #helpContent{
   background:#111;
-  border-radius:15px;
-  padding:25px;
-  max-width:500px;
-  font-size:0.9em;
+  margin:15% auto;
+  padding:20px;
+  width:80%;
+  max-width:400px;
+  border-radius:12px;
 }
-#helpContent button{
-  margin-top:15px;
-  background:#f44336;
+#helpClose{
+  float:right;
+  cursor:pointer;
+  font-size:22px;
 }
-
-/* ===================== GAME UI ===================== */
-#task,#wordDisplay{font-size:1.4em;margin:20px 0;font-family:'Press Start 2P',cursive;}
-#inputContainer{display:flex;flex-direction:column;align-items:center;}
-#playerWord,#answer{width:80%;max-width:400px;padding:10px;border-radius:10px;border:none;margin-bottom:15px;text-align:center;}
-button{padding:12px 25px;border-radius:10px;background:#2e7d32;color:white;border:none;cursor:pointer;}
-button:hover{background:#4caf50;}
-#message{margin-top:20px;min-height:40px;}
-#timer{margin-top:15px;font-weight:bold;}
-.timer-green{color:#4caf50;}
-.timer-yellow{color:#ffc107;}
-.timer-red{color:#f44336;}
-
-/* ===================== TIC TAC TOE ===================== */
-#board{display:grid;grid-template-columns:repeat(3,120px);grid-template-rows:repeat(3,120px);gap:12px;}
-.cell{width:120px;height:120px;font-size:48px;display:flex;align-items:center;justify-content:center;border-radius:15px;font-weight:bold;cursor:pointer;}
 </style>
 </head>
-
 <body>
 
-<button id="helpBtn" onclick="openHelp()">?</button>
+<button id="helpBtn" onclick="toggleHelp()">❓</button>
 
-<div id="helpBox">
+<div id="helpModal">
   <div id="helpContent">
-    <div id="helpText"></div>
-    <button onclick="closeHelp()">Close</button>
+    <span id="helpClose" onclick="toggleHelp()">✖</span>
+    <h3>💡 Help</h3>
+    <p>
+      • Word must start with last letter<br>
+      • No repeats / no reversed words<br>
+      • Beat AI to unlock next stage
+    </p>
   </div>
 </div>
 
@@ -94,120 +99,122 @@ button:hover{background:#4caf50;}
 </div>
 
 <script>
-// ========================== VARIABLES ==========================
+function toggleHelp(){
+  const m=document.getElementById('helpModal');
+  m.style.display = m.style.display==='block'?'none':'block';
+}
+
+/* ================= VARIABLES ================= */
 let stage='start', wordScore=0;
 let currentWord='', usedWords=[], wordList=[];
 let board=[], gameOver=false;
+let ticScore={player:0,ai:0,draw:0};
+let timer=6, timerInterval;
 
-// ========================== HELP SYSTEM ==========================
-function openHelp(){
-  let text='';
-  if(stage==='start') text='Press START to begin the brain trial.';
-  else if(stage==='word') text='Word Chain: Use the last letter of the previous word.';
-  else if(stage==='tic') text='Tic Tac Toe: Win 3 rounds before the AI.';
-  else if(stage==='math') text='Solve math tasks quickly and correctly.';
-  else if(stage==='chromatic') text='Make all tiles the same target color.';
-  document.getElementById('helpText').textContent=text;
-  document.getElementById('helpBox').style.display='flex';
-}
-function closeHelp(){
-  document.getElementById('helpBox').style.display='none';
-}
-
-// ========================== WORD CHAIN ==========================
+/* ================= WORD CHAIN ================= */
 function startWordChain(){
   stage='word';
   const c=document.getElementById('gameContainer');
   c.innerHTML=`
     <h1></h1>
     <div id="wordDisplay">Apple</div>
-    <div id="inputContainer">
-      <input id="playerWord" autocomplete="off">
-      <button onclick="playWord()">OK</button>
-    </div>
+    <input id="playerWord" placeholder="Type word">
+    <button onclick="playWord()">OK</button>
     <div id="message"></div>
   `;
-  currentWord='Apple';
+  currentWord="Apple";
   usedWords=[currentWord];
   wordList=["Apple","Elephant","Tiger","Rabbit","Tree","Eagle","Egg","Giraffe"];
 }
 
 function playWord(){
-  const input=document.getElementById('playerWord');
-  const msg=document.getElementById('message');
-  let w=input.value.trim();
-  if(!w)return;
+  const i=document.getElementById('playerWord');
+  let w=i.value.trim();
+  if(!w) return;
+  w=w[0].toUpperCase()+w.slice(1);
   if(w[0].toLowerCase()!==currentWord.slice(-1).toLowerCase()){
-    msg.textContent='❌ Wrong!';
+    document.getElementById('message').textContent="❌ Wrong!";
     return;
   }
   usedWords.push(w);
   currentWord=w;
-  document.getElementById('wordDisplay').textContent=currentWord;
-  input.value='';
+  document.getElementById('wordDisplay').textContent=w;
+  i.value='';
   setTimeout(aiTurn,500);
 }
 
 function aiTurn(){
+  const last=currentWord.slice(-1).toLowerCase();
+  const opts=wordList.filter(w=>w[0].toLowerCase()===last&&!usedWords.includes(w));
+  if(!opts.length) return;
+  const pick=opts[0];
+  usedWords.push(pick);
+  currentWord=pick;
+  document.getElementById('wordDisplay').textContent=pick;
   wordScore++;
-  if(wordScore>=6) setTimeout(startTicTacToe,800);
+  if(wordScore>=6) setTimeout(startTicTacToe,700);
 }
 
-// ========================== TIC TAC TOE ==========================
+/* ================= TIC TAC TOE ================= */
 function startTicTacToe(){
   stage='tic';
   const c=document.getElementById('gameContainer');
   c.innerHTML=`
     <h1></h1>
     <div id="board"></div>
+    <div id="timer"></div>
     <div id="message"></div>
   `;
   board=['','','','','','','','',''];
   renderBoard();
+  startTimer();
 }
 
 function renderBoard(){
   const b=document.getElementById('board');
   b.innerHTML='';
+  b.style.display='grid';
+  b.style.gridTemplateColumns='repeat(3,100px)';
   board.forEach((v,i)=>{
     const d=document.createElement('div');
-    d.className='cell';
     d.textContent=v;
+    d.style.cssText="width:100px;height:100px;border:1px solid #555;font-size:40px;display:flex;align-items:center;justify-content:center;cursor:pointer";
     d.onclick=()=>playerMove(i);
     b.appendChild(d);
   });
 }
 
-function playerMove(i){
-  if(board[i]!=='')return;
-  board[i]='X';
-  renderBoard();
-}
-  // ========================== TIC TAC TOE (CONTINUED) ==========================
-let ticScore={player:0,ai:0,draw:0};
-let timer=6, timerInterval;
-
-function aiMove(){
-  const empty=board.map((v,i)=>v===''?i:null).filter(v=>v!==null);
-  if(!empty.length) return;
-  board[empty[Math.floor(Math.random()*empty.length)]]='O';
-  renderBoard();
-  startTimer();
-}
-
 function startTimer(){
   clearInterval(timerInterval);
   timer=6;
+  updateTimer();
   timerInterval=setInterval(()=>{
     timer--;
-    if(timer<=0){
-      clearInterval(timerInterval);
-      aiMove();
-    }
+    updateTimer();
+    if(timer<=0){clearInterval(timerInterval); aiMove();}
   },1000);
 }
 
-// ========================== MATH CHALLENGE ==========================
+function updateTimer(){
+  document.getElementById('timer').textContent="⏳ "+timer;
+}
+
+function playerMove(i){
+  if(board[i])return;
+  board[i]='X';
+  renderBoard();
+  clearInterval(timerInterval);
+  setTimeout(aiMove,400);
+}
+
+function aiMove(){
+  const e=board.map((v,i)=>v===''?i:null).filter(v=>v!==null);
+  if(!e.length)return;
+  board[e[0]]='O';
+  renderBoard();
+  startTimer();
+}
+  /* ========================== MATH CHALLENGE ========================== */
 let correctAnswer=0, correctMathCount=0;
 let mathTimer=30, mathTimerInterval;
 
@@ -217,47 +224,75 @@ function startMathChallenge(){
   c.innerHTML=`
     <h1></h1>
     <div id="task"></div>
-    <div id="inputContainer">
-      <input id="answer" type="number">
-      <button onclick="checkMathAnswer()">OK</button>
-    </div>
+    <input id="answer" type="number" placeholder="Your answer">
+    <button onclick="checkMathAnswer()">OK</button>
     <div id="timer"></div>
     <div id="message"></div>
   `;
+  mathTimer=30;
   generateMathTask();
   startMathTimer();
 }
 
+function randomInt(min,max){
+  return Math.floor(Math.random()*(max-min+1))+min;
+}
+
 function generateMathTask(){
-  const a=Math.floor(Math.random()*20)+10;
-  const b=Math.floor(Math.random()*10)+2;
-  correctAnswer=a+b;
-  document.getElementById('task').textContent=`${a} + ${b} = ?`;
+  const a=randomInt(10,50);
+  const b=randomInt(2,10);
+  const c=randomInt(2,8);
+  correctAnswer=a+b*c;
+  document.getElementById('task').textContent=`${a} + ${b} × ${c} = ?`;
+  document.getElementById('answer').value='';
 }
 
 function startMathTimer(){
   clearInterval(mathTimerInterval);
-  mathTimer=30;
+  document.getElementById('timer').textContent=`⏳ Time left: ${mathTimer}`;
   mathTimerInterval=setInterval(()=>{
     mathTimer--;
-    document.getElementById('timer').textContent=`⏳ ${mathTimer}`;
-    if(mathTimer<=0) restartGame();
+    const t=document.getElementById('timer');
+    t.textContent=`⏳ Time left: ${mathTimer}`;
+    t.className='';
+    if(mathTimer>20)t.classList.add('timer-green');
+    else if(mathTimer>10)t.classList.add('timer-yellow');
+    else t.classList.add('timer-red');
+    if(mathTimer<=0){
+      clearInterval(mathTimerInterval);
+      correctMathCount=0;
+      restartGame();
+    }
   },1000);
 }
 
 function checkMathAnswer(){
   const v=document.getElementById('answer').value;
+  if(v==='') return;
+  clearInterval(mathTimerInterval);
   if(Number(v)===correctAnswer){
     correctMathCount++;
-    if(correctMathCount>=3) setTimeout(startChromaticTrial,700);
-    else generateMathTask();
-  } else restartGame();
+    document.getElementById('message').textContent="✅ Correct!";
+    if(correctMathCount>=9){
+      setTimeout(startChromaticTrial,700);
+      return;
+    }
+    setTimeout(()=>{
+      mathTimer=30;
+      generateMathTask();
+      startMathTimer();
+    },700);
+  }else{
+    document.getElementById('message').textContent="❌ Wrong!";
+    correctMathCount=0;
+    setTimeout(restartGame,1000);
+  }
 }
 
-// ========================== CHROMATIC TRIAL ==========================
-const colorsCT=["#e57373","#64b5f6","#81c784","#fff176","#ba68c8"];
+/* ========================== CHROMATIC TRIAL ========================== */
+const colorsCT=["#e57373","#64b5f6","#81c784","#fff176","#f44336","#ba68c8"];
 const CHROMATIC_GOAL="#ba68c8";
-let tilesCT=[], chromaticTimer=60, chromaticInterval;
+let tilesCT=[], chromaticTime=60, chromaticTimerInterval, uniformTimeout=null, solved=false;
 
 function startChromaticTrial(){
   stage='chromatic';
@@ -267,65 +302,99 @@ function startChromaticTrial(){
     <div id="grid"></div>
     <div id="timer"></div>
   `;
-  createGrid();
+  createChromaticGrid();
   startChromaticTimer();
 }
 
-function createGrid(){
+function createChromaticGrid(){
   const g=document.getElementById('grid');
   g.innerHTML='';
+  g.style.display='grid';
+  g.style.gridTemplateColumns='repeat(3,100px)';
+  g.style.gap='12px';
   tilesCT=[];
+  solved=false;
+
   for(let i=0;i<9;i++){
-    const t=document.createElement('div');
-    t.className='tile';
+    const d=document.createElement('div');
     const idx=Math.floor(Math.random()*colorsCT.length);
-    t.dataset.color=idx;
-    t.style.backgroundColor=colorsCT[idx];
-    t.onclick=()=>{cycleColor(t); checkChromaticWin();};
-    tilesCT.push(t);
-    g.appendChild(t);
+    d.dataset.color=idx;
+    d.style.background=colorsCT[idx];
+    d.style.cssText+=`width:100px;height:100px;border-radius:15px;cursor:pointer`;
+    d.onclick=()=>{
+      cycleColor(d);
+      checkWin();
+      checkUniformReset();
+    };
+    tilesCT.push(d);
+    g.appendChild(d);
   }
 }
 
 function cycleColor(tile){
+  if(solved) return;
   let i=Number(tile.dataset.color);
   i=(i+1)%colorsCT.length;
   tile.dataset.color=i;
-  tile.style.backgroundColor=colorsCT[i];
+  tile.style.background=colorsCT[i];
 }
 
-function checkChromaticWin(){
-  if(tilesCT.every(t=>colorsCT[t.dataset.color]===CHROMATIC_GOAL)){
-    clearInterval(chromaticInterval);
+function checkWin(){
+  const win=tilesCT.every(t=>colorsCT[t.dataset.color]==CHROMATIC_GOAL);
+  if(win && !solved){
+    solved=true;
+    clearInterval(chromaticTimerInterval);
+    alert("🫵");
     setTimeout(restartGame,500);
   }
 }
 
+function checkUniformReset(){
+  const f=colorsCT[tilesCT[0].dataset.color];
+  const same=tilesCT.every(t=>colorsCT[t.dataset.color]==f);
+  if(same && !solved){
+    clearTimeout(uniformTimeout);
+    uniformTimeout=setTimeout(startChromaticTrial,2000);
+  }else clearTimeout(uniformTimeout);
+}
+
 function startChromaticTimer(){
-  clearInterval(chromaticInterval);
-  chromaticTimer=60;
-  chromaticInterval=setInterval(()=>{
-    chromaticTimer--;
-    document.getElementById('timer').textContent=`⏳ ${chromaticTimer}`;
-    if(chromaticTimer<=0) restartGame();
+  clearInterval(chromaticTimerInterval);
+  chromaticTime=60;
+  const t=document.getElementById('timer');
+  t.textContent=`⏳ Time left: ${chromaticTime}`;
+  chromaticTimerInterval=setInterval(()=>{
+    chromaticTime--;
+    t.textContent=`⏳ Time left: ${chromaticTime}`;
+    t.className='';
+    if(chromaticTime>30)t.classList.add('timer-green');
+    else if(chromaticTime>10)t.classList.add('timer-yellow');
+    else t.classList.add('timer-red');
+    if(chromaticTime<=0){
+      clearInterval(chromaticTimerInterval);
+      clearTimeout(uniformTimeout);
+      restartGame();
+    }
   },1000);
 }
 
-// ========================== RESTART ==========================
+/* ========================== RESTART ========================== */
 function restartGame(){
-  clearInterval(timerInterval);
+  clearInterval(chromaticTimerInterval);
   clearInterval(mathTimerInterval);
-  clearInterval(chromaticInterval);
+  clearTimeout(uniformTimeout);
+
+  const c=document.getElementById('gameContainer');
+  c.innerHTML=`
+    <h1>🧠</h1>
+    <button onclick="startWordChain()">START</button>
+  `;
 
   stage='start';
   wordScore=0;
   correctMathCount=0;
   board=[];
-
-  document.getElementById('gameContainer').innerHTML=`
-    <h1>🧠</h1>
-    <button onclick="startWordChain()">START</button>
-  `;
+  usedWords=[];
 }
 </script>
 </body>
