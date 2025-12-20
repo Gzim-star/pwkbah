@@ -201,12 +201,20 @@ function playWord(){
   const message=document.getElementById('message');
   if(!word) return;
   // Mindestlänge
-if(word.length < 9){
+if(word.length < 6){
   message.textContent = "❌ Wrong";
   return;
 }
 
-  
+  const forbidden = [
+  "dog","cat","rat","ant","cow","lion","tiger","bear",
+  "apple","tree","hat","egg","fish"
+];
+
+if(forbidden.includes(word.toLowerCase())){
+  message.textContent = "❌ Too basic";
+  return;
+}
   // Kein gleicher Endbuchstabe wie davor
 const lastTwo = currentWord.slice(-2).toLowerCase();
 if(word.slice(-1).toLowerCase() === lastTwo[0]){
