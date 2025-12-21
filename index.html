@@ -200,7 +200,7 @@ function startWordChain(){
     opacity:0;
     transition: opacity 0.5s;
   "></div>
-`; 
+`;
   currentWord='Apple'; usedWords=[currentWord];
   wordList=["Algorithm","Entropy","Hypothesis","Paradox","Labyrinth",
   "Quantum","Syntax","Recursion","Neural","Topology",
@@ -243,12 +243,11 @@ function aiTurn(){
   let possible = wordList.filter(
     w => w[0].toLowerCase() === lastChar && !usedWords.includes(w)
   );
-  // 🤖 keine sichtbaren Wörter → Brain Hint
+
   if(possible.length === 0){
-    setTimeout(showWordChainHint, 5000);
-    return;
-  }
-  
+  setTimeout(showWordChainHint, 5000); // ⏱ nach 5 Sekunden Hinweis
+  return;
+}   
     const remaining = wordList.filter(w => !usedWords.includes(w));
     if(remaining.length > 0){
       const r = remaining[Math.floor(Math.random() * remaining.length)];
@@ -279,12 +278,11 @@ function aiTurn(){
 
   wordScore++;
 
-  if(wordScore >= 1){
+  if(wordScore >= 6){
     const msg = document.getElementById('message');
     msg.textContent = '';
     setTimeout(startTicTacToe, 500);
-  }
-function showWordChainHint(){
+  function showWordChainHint(){
   const hint = document.getElementById('wordHint');
   if(!hint) return;
 
@@ -293,8 +291,9 @@ function showWordChainHint(){
 
   setTimeout(()=>{
     hint.style.opacity = "0";
-  }, 3000);
+  }, 3000); // nach 3 Sekunden weg
 }
+
 
 
 // ========================== TIC TAC TOE ==========================
