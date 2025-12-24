@@ -8,26 +8,15 @@
 <style>
 html, body { height: 100%; margin: 0; }
 body {
-  font-family: Arial, Sans-Pixel;
-  color: white;
-  position: relative;
-  overflow-x: hidden;
-}
-
-/* Pseudo-Element für den festen Hintergrund */
-body::before {
-  content: "";
-  position: fixed;  /* bleibt immer an der gleichen Stelle */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  display: grid; place-items: center;
+ /* Hintergrundbild von Pexels – Foto von Markus Spiske */
   background: url('https://images.pexels.com/photos/1089438/pexels-photo-1089438.jpeg') no-repeat center center;
   background-size: cover;
-  z-index: -1; /* Hinter allen Inhalten */
-
+  color: white;
+  font-family: Arial, Sans-Pixel; text-align: center;
 }
-#gameContainer {
+
+  #gameContainer {
   width: 90%; max-width: 700px; min-height: 520px;
   padding: 20px;  border-radius: 15px;
   box-shadow: 0 0 25px rgba(255,255,255,0.08);
