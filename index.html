@@ -24,13 +24,22 @@ body {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
   #tipButton {
-  position: fixed;
+   position: fixed;
   bottom: 20px;
   right: 20px;
+
   background: none;
   border: none;
-  color: #d50000;
-  font-size: 28px;
+
+  font-family: 'Press Start 2P', cursive; /* 👈 gleicher Font */
+  font-size: 22px;                       /* nah am Original */
+  letter-spacing: 1px;
+
+  color: #ffc107;                        /* 👈 gleiche Hint-Farbe */
+  text-shadow:
+    0 0 6px rgba(255,193,7,0.8),
+    0 0 12px rgba(255,193,7,0.5);         /* 👈 Glow wie Hint */
+
   cursor: pointer;
   z-index: 1000;
 }
