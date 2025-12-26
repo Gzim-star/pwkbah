@@ -123,12 +123,10 @@ button:hover { background: #00000000; }
     // ========================== TIP BUTTON LOGIC ==========================
 const tipButton = document.getElementById('tipButton');
 const tipModal = document.getElementById('tipModal');
-tipButton.onclick = () => {
-  // Wenn Modal sichtbar → schließen
-  if(tipModal.style.display === 'block'){
-    tipModal.style.display = 'none';
-  } else {
+const closeBtn = document.querySelector('.close');
 
+tipButton.onclick = () => {
+  tipModal.classList.toggle('show');
   let tipText = '';
   if(stage === 'start') tipText = `
    <p><strong>BrainTrials</strong></p>
@@ -191,8 +189,7 @@ are essential to advance.
 
 <p>You are entering the arena of challenges.</p>
 <p>Only those who think clearly, react quickly, and recognize patterns will reach the end.</p> 
-
-`;
+  `;
 
   else if(stage === 'word') tipText = `
       <p>Word Chain Tips:</p>
