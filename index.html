@@ -199,7 +199,7 @@ closeBtn.onclick = () => tipModal.style.display = 'none';
 
 window.onclick = (e) => { 
   if(e.target === tipModal) tipModal.style.display = 'none';
-// ========================== TYPEWRITER EFFECT ==========================
+};// ========================== TYPEWRITER EFFECT ==========================
 function typeText(element, text, speed = 15) {
   element.innerHTML = "";
   let i = 0;
@@ -214,7 +214,6 @@ function typeText(element, text, speed = 15) {
 
   typing();
 }
-
   
 // ========================== VARIABLES ==========================
 let stage='start', wordScore=0, ticScore={player:0,ai:0,draw:0};
