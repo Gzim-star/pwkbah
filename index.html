@@ -642,9 +642,18 @@ function showChromaticMessage(){
   clearInterval(mathTimerInterval);
   clearTimeout(uniformTimeout);
 
-  const container = document.getElementById('startScreen').style.display = 'flex';
-  `;
+   // Startscreen wieder sichtbar
+  startScreen.style.display = 'flex';
 
+  // GameContainer wieder verstecken, bis Nutzer klickt
+  document.getElementById('gameContainer').style.display = 'none'; 
+// Startscreen-Logik
+const startScreen = document.getElementById('startScreen');
+
+startScreen.onclick = () => {
+  startScreen.style.display = 'none';
+  document.getElementById('gameContainer').style.display = 'flex';
+};
   // Variablen zurücksetzen
   stage = 'start';
   wordScore = 0;
