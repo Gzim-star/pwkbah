@@ -105,22 +105,29 @@ button:hover { background: #00000000; }
 .modal.open {
   display: block;
 }
-
+#startScreen {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+#startScreen img {
+  max-width: 90%;
+  height: auto;
+  cursor: pointer;
+}
 </style>
 </head>
 <body>
-<div id="gameContainer">
-
-  <img
-    src="BrainTrials.png"
-    id="startImage"
-    alt="BrainTrials"
-  >
-
-  <button id="startButton" style="display:none; margin-top:25px;">
-    START
-  </button>
-
+<div id="startScreen">
+  <img src="IMG_1240.jpeg" alt="BrainTrials Logo">
+</div>
+  <div id="gameContainer">
+  <h1></h1>
+  <button onclick="startWordChain()">  START  </button>
 </div>
   <!-- Tip Button -->
 <button id="tipButton">❗️</button>
@@ -133,6 +140,9 @@ button:hover { background: #00000000; }
   </div>
 </div>
   <script>
+  document.getElementById('startScreen').onclick = () => {
+  document.getElementById('startScreen').style.display = 'none';
+};
     // ========================== TIP BUTTON LOGIC ==========================
 const tipButton = document.getElementById('tipButton');
 const tipModal = document.getElementById('tipModal');
@@ -632,10 +642,7 @@ function showChromaticMessage(){
   clearInterval(mathTimerInterval);
   clearTimeout(uniformTimeout);
 
-  const container = document.getElementById('gameContainer');
-  container.innerHTML = `
-    <h1></h1>
-    <button onclick="startWordChain()">START</button>
+  const container = document.getElementById('startScreen').style.display = 'flex';
   `;
 
   // Variablen zurücksetzen
