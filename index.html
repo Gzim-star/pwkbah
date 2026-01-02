@@ -341,6 +341,18 @@ let mathTimer=30, mathTimerInterval;
 let lastPlayerClick = 0; // Zeit des letzten Klicks
 const clickCooldown = 300; // 300 ms zwischen erlaubten Klicks
 function showWordError(text) {
+ 
+  const message = document.getElementById('message');
+  if (!message) return;
+
+  message.textContent = text;
+  message.style.opacity = "1";
+
+  setTimeout(() => {
+    message.textContent = "";
+  }, 1200);
+}
+
 // ===== PASSWORD CHECK =====
 const passwordOverlay = document.getElementById('passwordOverlay');
 const passwordInput = document.getElementById('passwordInput');
@@ -364,19 +376,7 @@ function checkPassword() {
 passwordBtn.onclick = checkPassword;
 passwordInput.addEventListener('keyup', function(e){
   if(e.key === 'Enter') checkPassword();
-}); 
-  const message = document.getElementById('message');
-  if (!message) return;
-
-  message.textContent = text;
-  message.style.opacity = "1";
-
-  setTimeout(() => {
-    message.textContent = "";
-  }, 1200);
-}
-
-
+});
     
 // ========================== WORD CHAIN ==========================
 function startWordChain(){
