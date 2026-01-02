@@ -653,8 +653,8 @@ function startChromaticTimer(){
     timerDiv.textContent = `00:${seconds}`;
 
     timerDiv.className = '';
-    if(chromaticTime > 30) timerDiv.classList.add('timer-green');
-    else if(chromaticTime > 10) timerDiv.classList.add('timer-yellow');
+    if(chromaticTime > 40) timerDiv.classList.add('timer-green');
+    else if(chromaticTime > 20) timerDiv.classList.add('timer-yellow');
     else timerDiv.classList.add('timer-red');
 
     if(chromaticTime <= 0){
