@@ -25,7 +25,9 @@ body {
 }
 #startButton {
   visibility: hidden;
-  }
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
   #tipButton {
   position: fixed;
   bottom: 20px;
@@ -784,7 +786,7 @@ setTimeout(() => {
   const btn = document.getElementById('startButton');
   if (btn) {
     btn.style.visibility = 'visible';
-    btn.style.opacity = '1';
+    btn.style.opacity = '0';
   }
 }, 9000);
 </script>
