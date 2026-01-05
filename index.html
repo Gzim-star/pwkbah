@@ -23,9 +23,9 @@ body {
   box-shadow: black; 
   display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
- #startButton {
-  display: none; /* versteckt den Button am Anfang */
-}
+#startButton {
+  visibility: hidden;
+  }
   #tipButton {
   position: fixed;
   bottom: 20px;
@@ -783,7 +783,7 @@ treasure.onclick = (e) => {
 // Button nach 6 Sekunden anzeigen
 setTimeout(() => {
   const btn = document.getElementById('startButton');
-  if(btn) btn.style.display = 'inline-block';
+  if(btn) btn.style.display = 'visible';
 }, 9000); // 6000ms = 6 Sekunden
 </script>
 </body>
