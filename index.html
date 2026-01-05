@@ -23,6 +23,13 @@ body {
   box-shadow: black; 
   display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
+#gameContainer button {
+  height: 48px;
+}
+  #startButton {
+  position: relative;
+  top: 0;
+}
   #tipButton {
   position: fixed;
   bottom: 20px;
@@ -138,7 +145,8 @@ button:hover { background: #00000000; }
 </head>
 <body>
   
- <div id="startScreen">
+<div id="gameContainer" style="display:none;">
+  <div id="startScreen">
   <!-- Schatz versteckt -->
 <div id="treasure" title="Click me!" style="
     position: absolute;
@@ -178,7 +186,10 @@ button:hover { background: #00000000; }
 const tipButton = document.getElementById('tipButton');
 const tipModal = document.getElementById('tipModal');
 const closeBtn = document.querySelector('.close');
-
+const stratSreen = document.getElementById('startScreen').onclick = () => {
+const stratSreen = document.getElementById('startScreen').style.display = 'none';
+const gameContainer = document.getElementById('gameContainer').style.display = 'flex';
+};
 tipButton.onclick = () => {
   // 🔁 öffnen / schließen
   tipModal.classList.toggle('open');
