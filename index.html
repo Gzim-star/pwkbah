@@ -180,7 +180,8 @@ button:hover { background: #00000000; }
   <script>
   document.getElementById('startScreen').onclick = () => {
   document.getElementById('startScreen').style.display = 'none';
-};
+  startStartButtonTimer();
+  };
     // ========================== TIP BUTTON LOGIC ==========================
 const tipButton = document.getElementById('tipButton');
 const tipModal = document.getElementById('tipModal');
@@ -316,6 +317,7 @@ let timer=10, timerInterval;
 let mathTimer=30, mathTimerInterval;
 let lastPlayerClick = 0; // Zeit des letzten Klicks
 const clickCooldown = 300; // 300 ms zwischen erlaubten Klicks
+let startTimerStarted = false;
 function showWordError(text) {
   const message = document.getElementById('message');
   if (!message) return;
@@ -750,46 +752,46 @@ function showChromaticWin(){
 const treasure = document.getElementById('treasure');
 
 treasure.onclick = (e) => {
-  // Funken erzeugen
-  for(let i=0; i<5; i++){
-    const spark = document.createElement('div');
-    spark.className = 'spark';
-    spark.style.top = (e.clientY + (Math.random()*20-10)) + 'px';
-    spark.style.left = (e.clientX + (Math.random()*20-10)) + 'px';
-    document.body.appendChild(spark);
-    setTimeout(() => spark.remove(), 1000);
-  }
+  e.stopPropagation(); // ⛔ verhindert Doppelklick
 
-  // Text anzeigen
+  treasure.style.display = 'none';
+
+  // Welcome Text (bleibt wie er ist)
   const msg = document.createElement('div');
   msg.textContent = "Welcome";
   msg.style.position = 'fixed';
   msg.style.top = '10%';
   msg.style.left = '50%';
   msg.style.transform = 'translate(-50%, -50%)';
-  msg.style.background = 'none';
   msg.style.color = 'white';
-  msg.style.padding = '12px 20px';
-  msg.style.borderRadius = '12px';
   msg.style.fontFamily = "'Press Start 2P', cursive";
   msg.style.fontSize = '1.4em';
-  msg.style.zIndex = '5000';
   msg.style.opacity = '0';
-  msg.style.transition = 'opacity 15s';
+  msg.style.transition = 'opacity 1s';
   document.body.appendChild(msg);
+
   setTimeout(() => msg.style.opacity = '1', 50);
-  setTimeout(() => msg.remove(), 9000);
+  setTimeout(() => msg.remove(), 8000);
+
+  startStartButtonTimer(); // ✅ HIER der einzige Start
+};
 
   // Schatz verschwinden
   treasure.style.display = 'none';
 };
-setTimeout(() => {
+let startTimerStarted = false;
+
+function startStartButtonTimer() {
+  if (startTimerStarted) return; // ⛔ nur einmal
+  startTimerStarted = true;
+
   const btn = document.getElementById('startButton');
-  if (btn) {
-    btn.style.visibility = 'visible';
+
+  setTimeout(() => {
     btn.style.opacity = '1';
-  }
-}, 9000);
+    btn.style.pointerEvents = 'auto';
+  }, 9000);
+}
 </script>
 </body>
 </html>
