@@ -219,10 +219,7 @@ button:hover { background: #00000000; }
   document.getElementById('startScreen').onclick = () => {
   document.getElementById('startScreen').style.display = 'none';
 };
-    // ========================== TIP BUTTON LOGIC ==========================
-const tipButton = document.getElementById('tipButton');
-const tipModal = document.getElementById('tipModal');
-const closeBtn = document.querySelector('.close');
+    // ========================== TIP BUTTON LOGIC =========================
 const tipButton = document.getElementById('tipButton');
 
 // Start: Quadrat von rechts
@@ -240,6 +237,9 @@ setTimeout(() => {
 setTimeout(() => {
   tipButton.style.transform = 'scale(1)';
 }, 2000);
+const tipModal = document.getElementById('tipModal');
+const closeBtn = document.querySelector('.close');
+
 tipButton.onclick = () => {
   // 🔁 öffnen / schließen
   tipModal.classList.toggle('open');
