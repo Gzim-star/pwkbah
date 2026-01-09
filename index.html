@@ -53,7 +53,7 @@ body {
   display: inline-block;
 }
 
-/* 🎲 ECHTES ROLLEN */
+/*  ECHTES ROLLEN */
 #tipButton.roll .cube-face {
   animation: cubeRoll 2s ease-out forwards;
 }
@@ -235,7 +235,7 @@ button:hover { background: #00000000; }
 const tipButton = document.getElementById('tipButton');
 const cubeFace = tipButton.querySelector('.cube-face');
 
-// TIP BUTTON erst nach 6 Sekunden erscheinen lassen
+// TIP BUTTON erst nach 9 Sekunden erscheinen lassen
 setTimeout(() => {
   tipButton.classList.add('show'); // Button kommt rein
 
@@ -646,7 +646,7 @@ function startChromaticTrial(){
     <div id="chromaticText" style="
       margin-bottom:15px;
       font-family:'Press Start 2P', cursive;
-      font-size: 1em;
+      font-size: 0.8em;
       color:#808080;
       min-height:20px;
       opacity:0;
