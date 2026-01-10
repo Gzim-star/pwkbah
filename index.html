@@ -180,19 +180,24 @@ button:hover { background: #00000000; }
   100% { transform: scale(1); opacity: 1; }
 }
 
-  @keyframes tipPulse {
+ @keyframes innerPulse {
   0% {
     transform: scale(1);
-    box-shadow: 0 0 0 rgba(255,255,255,0);
+    opacity: 1;
   }
   50% {
-    transform: scale(1.08);
-    box-shadow: 0 0 12px rgba(255,255,255,0.6);
+    transform: scale(1.35);
+    opacity: 0.7;
   }
   100% {
     transform: scale(1);
-    box-shadow: 0 0 0 rgba(255,255,255,0);
+    opacity: 1;
   }
+}
+
+/* ❕ pulsiert nur wenn Hilfe nötig */
+#tipButton.help-needed .cube-face {
+  animation: innerPulse 1.4s ease-in-out infinite;
 }
 
 #tipButton.help-needed {
