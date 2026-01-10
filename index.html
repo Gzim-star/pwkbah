@@ -179,31 +179,6 @@ button:hover { background: #00000000; }
   50% { transform: scale(1.2); opacity: 0.8; }
   100% { transform: scale(1); opacity: 1; }
 }
-
- @keyframes innerPulse {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.35);
-    opacity: 0.7;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* ❕ pulsiert */
-#tipButton.pulse-only .cube-face {
-  animation: innerPulse 1.4s ease-in-out infinite;
-}
-
-#tipButton.help-needed {
-  animation: tipPulse 1.6s ease-in-out infinite;
-}
-
 .puls {
   position: absolute;
   width: 6px;
@@ -259,10 +234,7 @@ button:hover { background: #00000000; }
     // ========================== TIP BUTTON LOGIC =========================
 const tipButton = document.getElementById('tipButton');
 const cubeFace = tipButton.querySelector('.cube-face');
-  // ❕ beginnt nach 5 Sekunden zu pulsieren
-  setTimeout(() => {
-    tipButton.classList.add("pulse-only");
-  }, 62000);
+
 // TIP BUTTON erst nach 9 Sekunden erscheinen lassen
 setTimeout(() => {
   tipButton.classList.add('show'); // Button kommt rein
@@ -274,11 +246,6 @@ setTimeout(() => {
   setTimeout(() => {
     cubeFace.textContent = '❕';
     tipButton.classList.remove('roll'); // Animation beenden
-  // ❕ beginnt nach 5 Sekunden zu pulsieren
-  setTimeout(() => {
-    tipButton.classList.add("pulse-only");
-  }, 62000);
-  
   }, 2000); // Dauer des Rollen-Effekts (2 Sekunden)
 }, 60000); // ganze Sequenz startet nach 6 Sekunden
 
@@ -286,13 +253,11 @@ setTimeout(() => {
 const tipModal = document.getElementById('tipModal');
 const closeBtn = document.querySelector('.close');
 
- tipButton.onclick = () => {
-  tipButton.classList.remove("pulse-only");
-  // dein bestehender Code läuft weiter
-}; 
+tipButton.onclick = () => {
   // 🔁 öffnen / schließen
+  tipModal.classList.toggle('open');
 
- // wenn geschlossen → nichts machen
+  // wenn geschlossen → nichts machen
   if (!tipModal.classList.contains('open')) return;
   let tipText = '';
   if(stage === 'start') tipText = `
@@ -498,7 +463,6 @@ function aiTurn(){
     w => w[0].toLowerCase() === lastChar && !usedWords.includes(w)
   );// Wenn keine passenden Wörter → Brain Hint
 if(possible.length === 0){
-  showTipHelp(); // 💡 Spieler braucht Hilfe → Puls starten
   setTimeout(showWordChainHint, 5000);
   return;
 }
