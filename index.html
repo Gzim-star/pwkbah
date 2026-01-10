@@ -179,6 +179,26 @@ button:hover { background: #00000000; }
   50% { transform: scale(1.2); opacity: 0.8; }
   100% { transform: scale(1); opacity: 1; }
 }
+
+  @keyframes tipPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(255,255,255,0);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 12px rgba(255,255,255,0.6);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(255,255,255,0);
+  }
+}
+
+#tipButton.help-needed {
+  animation: tipPulse 1.6s ease-in-out infinite;
+}
+
 .puls {
   position: absolute;
   width: 6px;
@@ -234,7 +254,13 @@ button:hover { background: #00000000; }
     // ========================== TIP BUTTON LOGIC =========================
 const tipButton = document.getElementById('tipButton');
 const cubeFace = tipButton.querySelector('.cube-face');
+function showTipHelp() {
+  tipButton.classList.add("help-needed");
+}
 
+function stopTipHelp() {
+  tipButton.classList.remove("help-needed");
+}
 // TIP BUTTON erst nach 9 Sekunden erscheinen lassen
 setTimeout(() => {
   tipButton.classList.add('show'); // Button kommt rein
@@ -254,9 +280,10 @@ const tipModal = document.getElementById('tipModal');
 const closeBtn = document.querySelector('.close');
 
 tipButton.onclick = () => {
+  
   // 🔁 öffnen / schließen
   tipModal.classList.toggle('open');
-
+  stopTipHelp(); // Puls sofort stoppen
   // wenn geschlossen → nichts machen
   if (!tipModal.classList.contains('open')) return;
   let tipText = '';
@@ -463,6 +490,7 @@ function aiTurn(){
     w => w[0].toLowerCase() === lastChar && !usedWords.includes(w)
   );// Wenn keine passenden Wörter → Brain Hint
 if(possible.length === 0){
+  showTipHelp(); // 💡 Spieler braucht Hilfe → Puls starten
   setTimeout(showWordChainHint, 5000);
   return;
 }
