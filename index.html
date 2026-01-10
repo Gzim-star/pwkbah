@@ -284,10 +284,9 @@ const tipModal = document.getElementById('tipModal');
 const closeBtn = document.querySelector('.close');
 
 tipButton.onclick = () => {
-  
+  tipButton.classList.remove("pulse-only");
   // 🔁 öffnen / schließen
-  tipModal.classList.toggle('open');
-  stopTipHelp(); // Puls sofort stoppen
+
   // wenn geschlossen → nichts machen
   if (!tipModal.classList.contains('open')) return;
   let tipText = '';
