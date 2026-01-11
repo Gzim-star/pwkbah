@@ -877,24 +877,7 @@ setTimeout(() => {
   btn.style.pointerEvents = 'auto';
   }
 }, 90000);
-// ========================== INACTIVITY → BACK TO FLOW ==========================
-let inactivityTimer;
-const INACTIVITY_LIMIT = 20000; // 20 Sekunden
 
-function resetInactivityTimer() {
-  clearTimeout(inactivityTimer);
-  inactivityTimer = setTimeout(() => {
-    restartGame(); // 🔁 zurück zum Flow-Bild
-  }, INACTIVITY_LIMIT);
-}
-
-// Jede Aktivität setzt den Timer zurück
-['click', 'touchstart', 'keydown'].forEach(event => {
-  document.addEventListener(event, resetInactivityTimer, true);
-});
-
-// Timer beim Laden starten
-resetInactivityTimer();
 </script>
 </body>
 </html>
