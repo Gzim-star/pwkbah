@@ -866,14 +866,15 @@ function showChaosTable(duration = 10000) {
 
   container.innerHTML = '';
   container.style.opacity = '1';
-
+  container.style.pointerEvents = 'none'; // bleibt klickbar
+ 
   for (let i = 0; i < totalCells; i++) {
     const cell = document.createElement('div');
-    cell.style.color = 'lime'; // Matrix-Grün
+    cell.style.color = 'white'; // Matrix-Grün
     cell.style.fontFamily = "'Press Start 2P', cursive";
     cell.style.fontSize = '0.9em';
-    cell.style.opacity = 0;
-    cell.style.transition = 'opacity 0.3s';
+    cell.style.opacity = 1;
+  //  cell.style.transition = 'opacity 0.3s';
     
     // zufälliges Zeichen
     cell.textContent = symbols[Math.floor(Math.random() * symbols.length)];
