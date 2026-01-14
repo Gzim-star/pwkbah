@@ -471,6 +471,18 @@ if(word.length < 6){
   return;
 }
 
+// 🔒 Anti-Spam / Anti-Exploit
+const counts = {};
+for (let char of word.toLowerCase()) {
+  counts[char] = (counts[char] || 0) + 1;
+}
+
+const maxCount = Math.max(...Object.values(counts));
+if (maxCount / word.length >= 0.8) {
+  showWordError("Wrong");
+  return;
+}  
+
 // 🔒 Keine Wörter nur aus einem Buchstaben
 const uniqueChars = new Set(word.toLowerCase());
 if(uniqueChars.size === 1){
