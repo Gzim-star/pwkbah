@@ -582,24 +582,26 @@ if(possible.length === 0){
     setTimeout(startTicTacToe, 500);
   }
 }
-function wrongAttempt(msg = "Wrong") {
-  showWordError(msg);
-  wrongAttempts++;
 
- 
-  function showWordChainHint() {
+ function showWordChainHint() {
   const hint = document.getElementById('wordHint');
   if (!hint) return; // Falls das Element noch nicht geladen ist
   hint.textContent = "Only right words take you further";
   hint.style.opacity = "1";
-  if(wrongAttempts >= 1){
-    setTimeout(restartGame, 800);
-  }
-}
+
   setTimeout(() => {
     hint.style.opacity = "0";
   }, 3000);
 }
+
+function wrongAttempt(msg = "Wrong") {
+  showWordError(msg);
+  wrongAttempts++;
+
+  if(wrongAttempts >= 1){
+    setTimeout(restartGame, 800);
+  }
+}    
 // ========================== TIC TAC TOE ==========================
 function startTicTacToe(){
   stage='tic';
