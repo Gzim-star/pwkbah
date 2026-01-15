@@ -199,7 +199,7 @@ button:hover { background: #00000000; }
   pointer-events: none;
 }
 .system-blink {
-  animation: systemBlink 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: systemBlink 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes systemBlink {
@@ -208,15 +208,15 @@ button:hover { background: #00000000; }
     filter: blur(0px);
     transform: scale(1);
   }
-  35% {
-    opacity: 0.6;
-    filter: blur(1.2px);
-    transform: scale(0.992);
+  30% {
+    opacity: 0.5;
+    filter: blur(1.8px);
+    transform: scale(0.985);
   }
-  65% {
-    opacity: 0.85;
+  70% {
+    opacity: 0.9;
     filter: blur(0.6px);
-    transform: scale(0.996);
+    transform: scale(0.995);
   }
   100% {
     opacity: 1;
