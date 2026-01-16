@@ -593,8 +593,22 @@ if(possible.length === 0){
     hint.style.opacity = "0";
   }, 3000);
 }
+function showWordChainHint() {
+  if(stage !== 'word') return;
 
-function wrongAttempt(msg = "Wrong") {
+  const hint = document.getElementById('wordHint');
+  if (!hint) return;
+
+  hint.textContent = "Only the right words take you further";
+  hint.style.opacity = "1";
+
+  // ⏳ nach 3 Sekunden leiser Reset
+  setTimeout(() => {
+    restartGame();
+  }, 3000);
+}
+
+  function wrongAttempt(msg = "Wrong") {
   showWordError(msg);
   wrongAttempts++;
 
