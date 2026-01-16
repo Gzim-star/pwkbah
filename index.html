@@ -833,6 +833,13 @@ function checkWin(){
     showChromaticWin();
   }
 }
+function resetChromaticColors() {
+  tilesCT.forEach(tile => {
+    const idx = Math.floor(Math.random() * colorsCT.length);
+    tile.dataset.color = idx;
+    tile.style.backgroundColor = colorsCT[idx];
+  });
+}
 // Prüfen, ob alle Felder die gleiche Farbe haben (nicht unbedingt Ziel-Farbe)
 function checkUniformReset(){
   const firstColor = colorsCT[Number(tilesCT[0].dataset.color)];
@@ -840,7 +847,7 @@ function checkUniformReset(){
   if(allSame && !solved){
     clearTimeout(uniformTimeout);
     uniformTimeout = setTimeout(() => {
-      startChromaticTrial(); // Reset auf neue zufällige Farben
+      resetChromaticColors(); // Reset auf neue zufällige Farben
     }, 2000); // 2 Sekunden warten
   } else {
     clearTimeout(uniformTimeout);
