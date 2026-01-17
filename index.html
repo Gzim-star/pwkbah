@@ -942,7 +942,7 @@ function showChromaticWin(){
     restartGame();
   }, 5000); // ⏱ nach 5 Sekunden zurück zum Start
 }
-const treasure = document.getElementById('treasure');
+const treasure = document.getElementById('#startScreen img');
 
 treasure.onclick = (e) => {
   // Funken erzeugen
@@ -994,6 +994,11 @@ setTimeout(() => {
 }, 13000); // 3s warten + 6s Video
  
 };
+// 2️⃣ Flow-Bild → nur StartScreen verschwinden
+startScreenImg.onclick = () => {
+  document.getElementById('startScreen').style.display = 'none';
+};
+const treasure = document.getElementById('treasure');
 setTimeout(() => {
   const btn = document.getElementById('startButton');
   if (btn) {
@@ -1001,97 +1006,6 @@ setTimeout(() => {
   btn.style.pointerEvents = 'auto';
   }
 }, 90000);
-
-
-window.addEventListener('DOMContentLoaded', () => {
-  const startScreen = document.getElementById('startScreen');
-  const treasure = document.getElementById('treasure');
-  const startButton = document.getElementById('startButton');
-  const tipButton = document.getElementById('tipButton');
-  const welcomeVideo = document.getElementById('welcomeVideo');
-
-  // ========================== 1️⃣ Alles blockieren ==========================
-  startButton.style.opacity = '0';
-  startButton.style.pointerEvents = 'none';
-  tipButton.style.opacity = '0';
-  tipButton.style.pointerEvents = 'none';
-  welcomeVideo.pause();
-  welcomeVideo.style.display = 'none';
-
-  // Alte Klickhandler blockieren
-  startScreen.onclick = null;
-
-  // ========================== 2️⃣ Klick-Handler ==========================
-  function startOnClick() {
-    // StartScreen ausblenden
-    startScreen.style.display = 'none';
-
-    // Video starten
-    welcomeVideo.style.display = 'block';
-    welcomeVideo.currentTime = 0;
-    welcomeVideo.play();
-
-    // Nach Video alles freigeben
-    setTimeout(() => {
-      welcomeVideo.pause();
-      welcomeVideo.style.display = 'none';
-
-      // StartButton sichtbar machen
-      startButton.style.opacity = '1';
-      startButton.style.pointerEvents = 'auto';
-
-      // TipButton sichtbar machen / Animation starten
-      tipButton.style.opacity = '1';
-      tipButton.style.pointerEvents = 'auto';
-      tipButton.classList.add('show');
-      tipButton.classList.add('roll');
-
-      setTimeout(() => {
-        const cubeFace = tipButton.querySelector('.cube-face');
-        cubeFace.textContent = '❕';
-        tipButton.classList.remove('roll');
-        tipButton.classList.add('pulsing');
-      }, 2000);
-
-      // ✅ Alle originalen Timer nach Klick starten
-      if (typeof initTipButtonTimers === 'function') initTipButtonTimers();
-
-    }, 6000); // Dauer Video
-  }
-
-// 3️⃣ Klick auf Goldpunkt → Welcome-Text + Video
-treasure.onclick = startOnClick;
-
-// 3️⃣ Klick auf Flow-Bild → nur StartScreen ausblenden (kein Video, kein Welcome-Text)
-startScreen.querySelector('img').onclick = () => {
-  startScreen.style.display = 'none';
-};
-
-  // ========================== 4️⃣ Optionale Funktion zum späteren TipButton-Timer ==========================
-  // Damit deine originalen 30s/90s Timers nach Klick wieder normal laufen
-  window.initTipButtonTimers = () => {
-    setTimeout(() => {
-      tipButton.classList.add('show'); 
-      tipButton.classList.add('roll');
-
-      setTimeout(() => {
-        const cubeFace = tipButton.querySelector('.cube-face');
-        cubeFace.textContent = '❕';
-        tipButton.classList.remove('roll'); 
-        tipButton.classList.add('pulsing');
-        tipButton.style.pointerEvents = 'auto';
-      }, 2000);
-
-    }, 30000);
-
-    setTimeout(() => {
-      startButton.style.opacity = '1';
-      startButton.style.pointerEvents = 'auto';
-    }, 90000);
-  };
-});
-  
-
 
 </script>
 </body>
@@ -1106,7 +1020,6 @@ Created by Gëzim Hasani
 This project is protected by copyright law.
 Copying, selling, or redistributing this project
 or parts of it without permission is prohibited.
-
 
 
 
