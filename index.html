@@ -691,9 +691,7 @@ function playerMove(i){
   // AI-Zug nach kurzer Verzögerung
   setTimeout(aiMove,400);
 }
-function aiMove(){if(gameOver)return; const lvl=document.getElementById('levelSelect').value;  //🧠 Draws machen die AI stärker
-if (ticScore.draw >= 2) {
-  lvl = 'hard';
+function aiMove(){if(gameOver)return; const lvl=document.getElementById('levelSelect').value;
 } let move;if(lvl==='easy')move=randomMove(); else if(lvl==='medium')move=mediumMove(); else move=hardMove(); board[move]='O'; renderBoard(); if(checkWinner('O')){gameOver=true; ticScore.ai++; document.getElementById('message').textContent="AI wins"; updateScore(); if(ticScore.ai>=3){ setTimeout(startMathChallenge,800);} else { setTimeout(resetBoard,800);} return;} if(board.every(c=>c!=='')){gameOver=true; ticScore.draw++; updateScore();   // 🔁 Draw 3 → zurück zum Flow
   if (ticScore.draw >= 3) {
     setTimeout(restartGame, 800);
