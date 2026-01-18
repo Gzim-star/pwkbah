@@ -423,7 +423,10 @@ let mathTimer=30, mathTimerInterval;
 let lastPlayerClick = 0; // Zeit des letzten Klicks
 const clickCooldown = 300; // 300 ms zwischen erlaubten Klicks
 let wrongAttempts = 0; // ✅ RICHTIG PLATZIERT
-
+let ghostRestartPending = false;
+function triggerGhostRestart() {
+  ghostRestartPending = true;
+}
 let uiStarted = false;
 function showWordError(text) {
   const message = document.getElementById('message');
@@ -941,7 +944,41 @@ function restartGame(){
   // Flow-Bild anzeigen
   const startScreen = document.getElementById('startScreen');
   startScreen.style.display = 'flex';
-   
+    // 👻 GHOST ERSCHEINT ERST JETZT
+  if (ghostRestartPending) {
+    showGhostRestartTreasure();
+    ghostRestartPending = false;
+  }
+}
+function showGhostRestartTreasure(){
+  let ghost = document.getElementById('ghostRestartTreasure');
+
+  if (!ghost) {
+    ghost = document.createElement('div');
+    ghost.id = 'ghostRestartTreasure';
+
+    ghost.style.cssText = `
+      position:absolute;
+      top:46.3%;
+      left:46.0%;
+      transform:translate(-50%,-50%);
+      width:20px;
+      height:20px;
+      border-radius:50%;
+      background:rgba(255,215,0,0.35);
+      box-shadow:0 0 10px 3px rgba(255,215,0,0.5);
+      animation:pulse 2s infinite;
+      cursor:pointer;
+      z-index:4001;
+    `;
+
+    ghost.onclick = () => {
+      ghost.remove();
+      restartGameHard();
+    };
+
+    document.getElementById('startScreen').appendChild(ghost);
+  }
 }
 function showChromaticWin(){
   const text = document.getElementById('chromaticWinText');
