@@ -995,90 +995,96 @@ setTimeout(() => {
  
 };
 
-window.addEventListener('DOMContentLoaded', () => {
-const treasure = document.getElementById('treasure');
-const startButton = document.getElementById('startButton');
-const welcomeVideo = document.getElementById('welcomeVideo');
-const tipButton = document.getElementById('tipButton');
+document.addEventListener('DOMContentLoaded', () => {
+  const startScreen = document.getElementById('startScreen');
+  const treasure = document.getElementById('treasure');
+  const startButton = document.getElementById('startButton');
+  const tipButton = document.getElementById('tipButton');
+  const welcomeVideo = document.getElementById('welcomeVideo');
 
-// Alles initial ausblenden
-startButton.style.opacity = '0';
-startButton.style.pointerEvents = 'none';
-tipButton.style.opacity = '0';
-tipButton.style.pointerEvents = 'none';
+  // Initial ausblenden
+  startButton.style.opacity = '0';
+  startButton.style.pointerEvents = 'none';
+  tipButton.style.opacity = '0';
+  tipButton.style.pointerEvents = 'none';
+  welcomeVideo.style.display = 'none';
 
-// Klick auf Goldpunkt → alles starten
-treasure.onclick = (e) => {
-  // Funken erzeugen
-  for (let i = 0; i < 5; i++) {
-    const spark = document.createElement('div');
-    spark.className = 'spark';
-    spark.style.top = (e.clientY + (Math.random() * 20 - 10)) + 'px';
-    spark.style.left = (e.clientX + (Math.random() * 20 - 10)) + 'px';
-    document.body.appendChild(spark);
-    setTimeout(() => spark.remove(), 1000);
-  }
+  // Klick auf Goldpunkt
+  treasure.onclick = (e) => {
+    // 1️⃣ StartScreen ausblenden
+    startScreen.style.display = 'none';
 
-  // ---------------- 1️⃣ Welcome Text ----------------
-  const msg = document.createElement('div');
-  msg.textContent = "Welcome";
-  msg.style.position = 'fixed';
-  msg.style.top = '10%';
-  msg.style.left = '50%';
-  msg.style.transform = 'translate(-50%, -50%)';
-  msg.style.color = 'white';
-  msg.style.padding = '12px 20px';
-  msg.style.borderRadius = '12px';
-  msg.style.fontFamily = "'Press Start 2P', cursive";
-  msg.style.fontSize = '1.4em';
-  msg.style.zIndex = '5000';
-  msg.style.opacity = '0';
-  msg.style.transition = 'opacity 1.5s';
-  document.body.appendChild(msg);
+    // 2️⃣ Funken
+    for (let i = 0; i < 5; i++) {
+      const spark = document.createElement('div');
+      spark.className = 'spark';
+      spark.style.top = (e.clientY + (Math.random() * 20 - 10)) + 'px';
+      spark.style.left = (e.clientX + (Math.random() * 20 - 10)) + 'px';
+      document.body.appendChild(spark);
+      setTimeout(() => spark.remove(), 1000);
+    }
 
-  // Sanft einblenden nach 1,5s
-  setTimeout(() => msg.style.opacity = '1', 1500);
-
-  // Text bleibt 9s, dann ausblenden
-  setTimeout(() => {
+    // 3️⃣ Welcome Text
+    const msg = document.createElement('div');
+    msg.textContent = "Welcome";
+    msg.style.position = 'fixed';
+    msg.style.top = '10%';
+    msg.style.left = '50%';
+    msg.style.transform = 'translate(-50%, -50%)';
+    msg.style.color = 'white';
+    msg.style.padding = '12px 20px';
+    msg.style.borderRadius = '12px';
+    msg.style.fontFamily = "'Press Start 2P', cursive";
+    msg.style.fontSize = '1.4em';
+    msg.style.zIndex = '5000';
     msg.style.opacity = '0';
-    setTimeout(() => msg.remove(), 1500);
-  }, 10500); // 1,5s Einblenden + 9s sichtbar
+    msg.style.transition = 'opacity 1.5s';
+    document.body.appendChild(msg);
 
-  // ---------------- 2️⃣ Video starten ----------------
-  setTimeout(() => {
-    welcomeVideo.style.display = 'block';
-    welcomeVideo.currentTime = 0;
-    welcomeVideo.play();
+    // Sanft einblenden
+    setTimeout(() => msg.style.opacity = '1', 1500);
 
-    // Video nach 6s ausblenden
+    // Nach 9s ausblenden
     setTimeout(() => {
-      welcomeVideo.pause();
-      welcomeVideo.style.display = 'none';
-    }, 6000);
-  }, 10500); // Video startet gleichzeitig mit Text-Ausblenden
+      msg.style.opacity = '0';
+      setTimeout(() => msg.remove(), 1500);
+    }, 10500);
 
-  // ---------------- 3️⃣ TipButton nach 30s ----------------
-  setTimeout(() => {
-    tipButton.style.opacity = '1';
-    tipButton.style.pointerEvents = 'auto';
-    tipButton.classList.add('show');
-    tipButton.classList.add('roll');
-
+    // 4️⃣ Video starten
     setTimeout(() => {
-      const cubeFace = tipButton.querySelector('.cube-face');
-      cubeFace.textContent = '❕';
-      tipButton.classList.remove('roll');
-      tipButton.classList.add('pulsing');
-    }, 2000);
-  }, 30000);
+      welcomeVideo.style.display = 'block';
+      welcomeVideo.currentTime = 0;
+      welcomeVideo.play();
 
-  // ---------------- 4️⃣ StartButton nach 90s ----------------
-  setTimeout(() => {
-    startButton.style.opacity = '1';
-    startButton.style.pointerEvents = 'auto';
-  }, 90000);
-};
+      setTimeout(() => {
+        welcomeVideo.pause();
+        welcomeVideo.style.display = 'none';
+      }, 6000);
+    }, 10500);
+
+    // 5️⃣ TipButton nach 30s
+    setTimeout(() => {
+      tipButton.style.opacity = '1';
+      tipButton.style.pointerEvents = 'auto';
+      tipButton.classList.add('show');
+      tipButton.classList.add('roll');
+
+      setTimeout(() => {
+        const cubeFace = tipButton.querySelector('.cube-face');
+        cubeFace.textContent = '❕';
+        tipButton.classList.remove('roll');
+        tipButton.classList.add('pulsing');
+      }, 2000);
+    }, 30000);
+
+    // 6️⃣ StartButton nach 90s
+    setTimeout(() => {
+      startButton.style.opacity = '1';
+      startButton.style.pointerEvents = 'auto';
+    }, 90000);
+  };
+});
+
 </script>
 </body>
 </html>
