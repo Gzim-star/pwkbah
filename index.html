@@ -254,8 +254,7 @@ button:hover { background: #00000000; }
   <source src="att.7KmgCeoPRAfcm8wOdhsPirAp4NqHkg-VfXklv2c3BSk.MP4" type="video/mp4">
 </video>
   <script>
-  document.getElementById('startScreen').onclick = () => {
-  document.getElementById('startScreen').style.display = 'none';
+
 };
     // ========================== TIP BUTTON LOGIC =========================
 const tipButton = document.getElementById('tipButton');
@@ -940,6 +939,11 @@ function showChromaticWin(){
 const treasure = document.getElementById('treasure');
 
 treasure.onclick = (e) => {
+  e.stopPropagation(); // 🔑 GANZ WICHTIG
+
+  // Startscreen ausblenden
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('gameContainer').style.display = 'flex';
 startUISequence(); // ⭐ HIER
 // Funken erzeugen
   for(let i=0; i<5; i++){
