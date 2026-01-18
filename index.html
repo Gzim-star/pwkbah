@@ -201,7 +201,22 @@ button:hover { background: #00000000; }
 </style>
 </head>
 <body>
-  
+  <!-- Restart Button -->
+<button id="restartBtn" style="
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 5000;
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-family: 'Press Start 2P', cursive;
+  background: gold;
+  color: black;
+  cursor: pointer;
+  display: none; /* nur sichtbar im Spiel */
+  box-shadow: 0 0 10px 2px gold;
+  animation: pulse 2s infinite;
+">Restart</button>
  <div id="startScreen">
   <!-- Schatz versteckt -->
 <div id="treasure" title="Click me!" style="
@@ -900,13 +915,14 @@ function showChromaticMessage(){
   }, 3000);
 }
 function restartGame(){
-  clearInterval(chromaticTimerInterval);
+  // ⏹ Alle Timer stoppen
+  clearInterval(timerInterval);
   clearInterval(mathTimerInterval);
+  clearInterval(chromaticTimerInterval);
   clearTimeout(uniformTimeout);
-  
-  wrongAttempts = 0; // 🔑 WICHTIG
-  
-  // Variablen zurücksetzen
+
+  // 🔑 Alle Status zurücksetzen
+  wrongAttempts = 0;
   stage = 'start';
   wordScore = 0;
   ticScore = {player:0, ai:0, draw:0};
@@ -916,14 +932,55 @@ function restartGame(){
   gameOver = false;
   correctAnswer = 0;
   correctMathCount = 0;
+  solved = false;
+  uiStarted = false;
 
-  // Spiel ausblenden
-  document.getElementById('gameContainer').style.display = 'none';
+  // ⬆ Container ausblenden
+  const container = document.getElementById('gameContainer');
+  container.style.display = 'none';
+  container.innerHTML = '';
 
-  // Flow-Bild anzeigen
+  // ⬆ Treasure + Flow-Bild anzeigen
   const startScreen = document.getElementById('startScreen');
   startScreen.style.display = 'flex';
-   
+
+  // ⬆ Restart-Button ausblenden
+  document.getElementById('restartBtn').style.display = 'none';
+}
+const restartBtn = document.getElementById('restartBtn');
+restartBtn.onclick = () => {
+  restartGame();         // Alles zurücksetzen
+  startWordChain();      // Spiel von Anfang starten
+
+  // ⬆ Button wieder anzeigen
+  restartBtn.style.display = 'block';
+};
+function startWordChain(){
+  stage='word';
+  document.getElementById('gameContainer').style.display = 'flex';
+  document.getElementById('restartBtn').style.display = 'block'; // Button sichtbar
+  // ... Rest deines Codes
+}
+
+function startTicTacToe(){
+  stage='tic';
+  document.getElementById('gameContainer').style.display = 'flex';
+  document.getElementById('restartBtn').style.display = 'block'; // Button sichtbar
+  // ... Rest deines Codes
+}
+
+function startMathChallenge(){
+  stage='math';
+  document.getElementById('gameContainer').style.display = 'flex';
+  document.getElementById('restartBtn').style.display = 'block';
+  // ... Rest deines Codes
+}
+
+function startChromaticTrial(){
+  stage='chromatic';
+  document.getElementById('gameContainer').style.display = 'flex';
+  document.getElementById('restartBtn').style.display = 'block';
+  // ... Rest deines Codes
 }
 function showChromaticWin(){
   const text = document.getElementById('chromaticWinText');
