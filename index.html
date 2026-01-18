@@ -254,9 +254,12 @@ button:hover { background: #00000000; }
   <source src="att.7KmgCeoPRAfcm8wOdhsPirAp4NqHkg-VfXklv2c3BSk.MP4" type="video/mp4">
 </video>
   <script>
-  let gameReady = false; // 🔒 Spiel gesperrt beim Laden
+  
   document.getElementById('startScreen').onclick = () => {
-  gameReady = true; // 🔓 Spieler ist bereit
+    if (!gameReady) {
+    gameReady = true;
+    startIntroTimers();
+    }
   document.getElementById('startScreen').style.display = 'none';
 };
     // ========================== TIP BUTTON LOGIC =========================
@@ -264,8 +267,8 @@ const tipButton = document.getElementById('tipButton');
 const cubeFace = tipButton.querySelector('.cube-face');
 
 // TIP BUTTON erst nach 9 Sekunden erscheinen lassen
+function startIntroTimers() {
 setTimeout(() => {
-  if (!gameReady) return; // 🔒 noch nicht starten
   tipButton.classList.add('show'); // Button kommt rein
 
   //  Würfel langsam rollen
@@ -415,6 +418,7 @@ let stage='start', wordScore=0, ticScore={player:0,ai:0,draw:0};
 let currentWord='', usedWords=[], wordList=[];
 let board=[], gameOver=false;
 let correctAnswer=0, correctMathCount=0;
+let gameReady = false;
 let timer=10, timerInterval;
 let mathTimer=30, mathTimerInterval;
 let lastPlayerClick = 0; // Zeit des letzten Klicks
@@ -433,7 +437,6 @@ function showWordError(text) {
 }
 // ========================== WORD CHAIN ==========================
 function startWordChain(){
-  if (!gameReady) return; // 🔒 Blockiert Start
   stage='word';
   const container=document.getElementById('gameContainer');
   container.innerHTML=`
@@ -949,7 +952,11 @@ function showChromaticWin(){
 const treasure = document.getElementById('treasure');
 
 treasure.onclick = (e) => {
-  // Funken erzeugen
+ if (!gameReady) {
+    gameReady = true;
+    startIntroTimers();
+  }
+     // Funken erzeugen
   for(let i=0; i<5; i++){
     const spark = document.createElement('div');
     spark.className = 'spark';
@@ -998,8 +1005,9 @@ setTimeout(() => {
 }, 13000); // 3s warten + 6s Video
  
 };
-setTimeout(() => {
-  if (!gameReady) return;
+  
+  function startIntroTimers() {
+  setTimeout(() => {
   const btn = document.getElementById('startButton');
   if (btn) {
   btn.style.opacity = '1';
