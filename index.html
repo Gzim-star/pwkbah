@@ -258,7 +258,10 @@ button:hover { background: #00000000; }
     gameReady = true;
     startIntroTimers();
     }
+  
+  let gameReady = false; // 🔒 Spiel gesperrt beim Laden
   document.getElementById('startScreen').onclick = () => {
+  gameReady = true; // 🔓 Spieler ist bereit
   document.getElementById('startScreen').style.display = 'none';
 };
     // ========================== TIP BUTTON LOGIC =========================
@@ -266,7 +269,11 @@ const tipButton = document.getElementById('tipButton');
 const cubeFace = tipButton.querySelector('.cube-face');
 
 // TIP BUTTON erst nach 9 Sekunden erscheinen lassen
-setTimeout(() => {
+ if (!gameReady) {
+    gameReady = true;
+    startIntroTimers();
+    }
+  setTimeout(() => {
   tipButton.classList.add('show'); // Button kommt rein
 
   //  Würfel langsam rollen
@@ -1003,7 +1010,10 @@ setTimeout(() => {
 }, 13000); // 3s warten + 6s Video
  
 };
-function startIntroTimers() {
+ if (!gameReady) {
+    gameReady = true;
+    startIntroTimers();
+    }
  setTimeout(() => {
   const btn = document.getElementById('startButton');
   if (btn) {
