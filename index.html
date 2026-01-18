@@ -595,16 +595,7 @@ if(possible.length === 0){
   }
 }
 
- function showWordChainHint() {
-  const hint = document.getElementById('wordHint');
-  if (!hint) return; // Falls das Element noch nicht geladen ist
-  hint.textContent = "Correct word allow progression";
-  hint.style.opacity = "1";
 
-  setTimeout(() => {
-    hint.style.opacity = "0";
-  }, 3000);
-}
 function showWordChainHint() {
   if(stage !== 'word') return;
 
@@ -745,11 +736,11 @@ function startMathChallenge(){
 
 function randomInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
 function generateMathTask(){const p=randomInt(1,3); let a,b,c,text; if(p===1){a=randomInt(10,40); b=randomInt(2,12); c=randomInt(5,30); correctAnswer=a+b*c; text=`${a} + ${b} × ${c}`;} if(p===2){a=randomInt(20,80); b=randomInt(2,10); c=randomInt(5,20); correctAnswer=a * b / c; text=`${a} × ${b} / ${c}`;} if(p===3){a=randomInt(20,80); b=randomInt(2,10); c=randomInt(2,6); correctAnswer=a-b*c; text=`${a} - ${b} × ${c}`;} document.getElementById('task').textContent=`${text} = `; document.getElementById('answer').value=''; document.getElementById('message').textContent=''; document.getElementById('answer').focus();}
-function startMathTimer(){clearInterval(mathTimerInterval); mathTimerInterval=setInterval(()=>{mathTimer--; const d=document.getElementById('timer'); const seconds = String(mathTimer).padStart(2, '0'); d.textContent=`00:${seconds}`; d.className=''; if(mathTimer>=20)d.classList.add('timer-green'); else if(mathTimer>=10)d.classList.add('timer-yellow'); else d.classList.add('timer-red'); if(mathTimer<=0){clearInterval(mathTimerInterval); correctMathCount=0; restartGame(); triggerGhostRestart(); }},1000);}
+function startMathTimer(){clearInterval(mathTimerInterval); mathTimerInterval=setInterval(()=>{mathTimer--; const d=document.getElementById('timer'); const seconds = String(mathTimer).padStart(2, '0'); d.textContent=`00:${seconds}`; d.className=''; if(mathTimer>=20)d.classList.add('timer-green'); else if(mathTimer>=10)d.classList.add('timer-yellow'); else d.classList.add('timer-red'); if(mathTimer<=0){clearInterval(mathTimerInterval); correctMathCount=0; triggerGhostRestart(); restartGame(); }},1000);}
 function checkMathAnswer(){const input=document.getElementById('answer'); if(input.value==='')return; clearInterval(mathTimerInterval); let userAnswer = Number(input.value);
 let correctRounded = Number(correctAnswer.toFixed(4));
 
-if(Math.abs(userAnswer - correctRounded) < 0.0001){correctMathCount++; document.getElementById('message').textContent='Correct'; if(correctMathCount>=9){ setTimeout(startChromaticTrial,700); return;} setTimeout(()=>{mathTimer=30; generateMathTask(); startMathTimer();},700);} else{document.getElementById('message').textContent='Wrong'; correctMathCount=0; setTimeout(restartGame,1000); setTimeout(triggerGhostRestart,1000); }}
+if(Math.abs(userAnswer - correctRounded) < 0.0001){correctMathCount++; document.getElementById('message').textContent='Correct'; if(correctMathCount>=9){ setTimeout(startChromaticTrial,700); return;} setTimeout(()=>{mathTimer=30; generateMathTask(); startMathTimer();},700);} else{document.getElementById('message').textContent='Wrong'; correctMathCount=0; setTimeout(triggerGhostRestart,1000); setTimeout(restartGame,1000); }}
 
 // ========================== CHROMATIC TRIAL ==========================
 const colorsCT=["#ba68c8",
@@ -857,7 +848,7 @@ function checkWin(){
     clearInterval(chromaticTimerInterval);
     clearTimeout(uniformTimeout);
     showChromaticWin();
-    triggerGhostRestart();
+    
   }
 }
 function resetChromaticColors() {
@@ -905,7 +896,7 @@ function startChromaticTimer(){
     if(chromaticTime <= 0){
       clearInterval(chromaticTimerInterval);
       clearTimeout(uniformTimeout);
-      restartGame();triggerGhostRestart();
+      triggerGhostRestart(); restartGame();
     }
   }, 1000);
 }
@@ -963,9 +954,7 @@ function showGhostRestartTreasure(){
   };
 }
 
-  if (!ghost) {
-    ghost = document.createElement('div');
-    ghost.id = 'ghostRestartTreasure';
+ 
 
     ghost.style.cssText = `
       position:absolute;
@@ -995,6 +984,8 @@ function restartGameHard(){
   wrongAttempts = 0;
   ghostRestartPending = false;
 
+  uiStarted = false;
+  
   document.getElementById('startScreen').style.display = 'none';
   document.getElementById('gameContainer').style.display = 'flex';
 
@@ -1096,23 +1087,7 @@ function startUISequence() {
 }
 
 
-  // Zeige kurz die Animation, dass ein Restart passiert
-  ghost.style.display = 'block';
 
-  // Funken-Effekt wie beim Treasure
-  for(let i=0; i<5; i++){
-    const spark = document.createElement('div');
-    spark.className = 'spark';
-    spark.style.position = 'absolute';
-    spark.style.top = (ghost.offsetTop + Math.random()*20 - 10) + 'px';
-    spark.style.left = (ghost.offsetLeft + Math.random()*20 - 10) + 'px';
-    document.body.appendChild(spark);
-    setTimeout(() => spark.remove(), 1000);
-  }
-
-  // Kurze Verzögerung, dann Restart ausführen
-  setTimeout(() => {
-    ghost.style.display = 'none'; // wieder ausblenden
 
     // ==== Restart-Logik ====
     wrongAttempts = 0;
