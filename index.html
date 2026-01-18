@@ -273,8 +273,7 @@ tipButton.classList.add('show'); // Button kommt rein
 
   // ❕ nach dem Rollen
   setTimeout(() => {
-   if (!gameReady) return; // 🔒 Blockiert, wenn Spieler nicht bereit ist
-    cubeFace.textContent = '❕';
+   cubeFace.textContent = '❕';
     tipButton.classList.remove('roll'); // Animation beenden
     // ❕ beginnt sanft zu pulsieren (Modal ist zu)
     tipButton.classList.add('pulsing');
