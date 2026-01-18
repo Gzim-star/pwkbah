@@ -1001,34 +1001,7 @@ setTimeout(() => {
   btn.style.pointerEvents = 'auto';
   }
 }, 90000);
-window.addEventListener('DOMContentLoaded', () => {
-  const startScreen = document.getElementById('startScreen');
-  const treasure = document.getElementById('treasure');
-  const startButton = document.getElementById('startButton');
-  const tipButton = document.getElementById('tipButton');
-  const welcomeVideo = document.getElementById('welcomeVideo');
-  const flowImage = startScreen.querySelector('img');
 
-  // ========================== Alles blockieren beim Laden ==========================
-  startButton.style.opacity = '0';
-  startButton.style.pointerEvents = 'none';
-  tipButton.style.opacity = '0';
-  tipButton.style.pointerEvents = 'none';
-  welcomeVideo.pause();
-  welcomeVideo.style.display = 'none';
-
-
-
-    // Optional: alte Timer starten, falls du sie brauchst
-    if (typeof initTipButtonTimers === 'function') initTipButtonTimers();
-  };
-
- 
-
-      if (typeof initTipButtonTimers === 'function') initTipButtonTimers();
-    }, 6000);
-   }
-    
 </script>
 </body>
 </html>
