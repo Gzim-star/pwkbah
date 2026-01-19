@@ -937,11 +937,7 @@ function restartGame(){
   const startScreen = document.getElementById('startScreen');
   startScreen.style.display = 'flex';
     // 👻 GHOST ERSCHEINT ERST JETZT
-if (ghostRestartPending && !ghostVisible) {
-  showGhostRestartTreasure();
-  ghostVisible = true;
-  }
-}
+
 function showGhostRestartTreasure(){
   const ghost = document.getElementById('ghostRestartTreasure');
   ghost.style.display = 'block';
@@ -979,7 +975,11 @@ function restartGame(){
   
 }
 
-
+if (ghostRestartPending && !ghostVisible) {
+  showGhostRestartTreasure();
+  ghostVisible = true;
+  }
+}
 
   function showChromaticWin(){
   const text = document.getElementById('chromaticWinText');
