@@ -953,8 +953,8 @@ function showChromaticWin() {
   const text = document.getElementById('chromaticWinText');
   if(!text) return;
 
-  text.style.opacity = "1";
-
+text.style.opacity = "1";
+ triggerGhostRestart();
   setTimeout(() => {
     restartGame();
     // 🔑 UI-Sequenz wieder erlauben
