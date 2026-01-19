@@ -949,7 +949,7 @@ function restartGame(){
 function showGhostRestartTreasure(){
   const ghost = document.getElementById('ghostRestartTreasure');
   ghost.style.display = 'block';
-
+  ghost.style.cursor = 'pointer';  // damit man weiß, dass man klicken kann
   // Nur hier kann der Spieler auf den Ghost klicken, um Restart zu starten
   ghost.onclick = () => {
     ghost.style.display = 'none';
@@ -966,7 +966,7 @@ function restartGameHard(){
   uiStarted = false;
   wrongAttempts = 0;
   ghostRestartPending = false;
-
+  ghostVisible = false;
  
   
   document.getElementById('startScreen').style.display = 'none';
