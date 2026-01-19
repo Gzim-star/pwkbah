@@ -980,10 +980,12 @@ function restartGameHard(){
 function globalRestartFromTreasure() {
   // 👻 Ghost sauber zurücksetzen
   const ghost = document.getElementById('ghostRestartTreasure');
-  ghost.style.display = 'none';
-  ghostRestartPending = false;
-  ghostVisible = false;
-
+  ghost.style.display = 'block';
+  ghost.onclick = (e) => {
+    e.stopPropagation();
+    globalRestartFromTreasure();
+  };
+}
   // Startscreen aus
   document.getElementById('startScreen').style.display = 'none';
 
