@@ -479,19 +479,19 @@ function playWord(){
   const message=document.getElementById('message');
   if(!word) return;
     // <-- HIER direkt nach dem Trim einfügen:
-  // ❌ Nur Buchstaben erlaubt
+// 1️⃣ Nur Buchstaben erlaubt
   if (!/^[a-zA-Z]+$/.test(word)) {
     wrongAttempt("Wrong");
     return;
 }
   
-  // Mindestlänge
+// 2️⃣ Mindestlänge
 if(word.length < 6){
   showWordError("Wrong");
   return;
 }
 
-// 2️⃣ Wiederholungs-Start
+// 3️⃣ Wiederholungs-Start
 const startChar = word[0].toLowerCase();
 let run = 0;
 for (let c of word.toLowerCase()) {
@@ -503,7 +503,7 @@ if (run >= 4) {
   return;
 }
 
-// 3️⃣ Buchstaben-Dominanz
+// 4️⃣ Buchstaben-Dominanz
 const counts = {};
 for (let c of word.toLowerCase()) {
   counts[c] = (counts[c] || 0) + 1;
@@ -514,13 +514,13 @@ if (maxCount / word.length >= 0.7) {
   return;
 }
 
-// 4️⃣ Varianz
+// 5️⃣ Varianz
 if (new Set(word.toLowerCase()).size < 3) {
   wrongAttempt("Wrong");
   return;
 }
 
-  // Kein gleicher Endbuchstabe wie davor
+// 6️⃣ Kein gleicher Endbuchstabe wie davor
 const lastTwo = currentWord.slice(-2).toLowerCase();
 if(word.slice(-1).toLowerCase() === lastTwo[0]){
   wrongAttempt("Wrong");
