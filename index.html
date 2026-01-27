@@ -198,18 +198,55 @@ button:hover { background: #00000000; }
   animation: none;
   pointer-events: none;
 }
-/* Puzzle-Zellen */
-#statePuzzleWrapper .cell {
-  width: min(24px, 6vw);
-  height: min(24px, 6vw);
-  background: #808080;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: all 0.2s;
+/* Wrapper */
+.game-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: opacity 1.2s ease; /* 👈 Fade */
 }
 
-#statePuzzleWrapper .cell.active {
-  background: gold;
+.game-wrapper.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Grid */
+#grid {
+  display: grid;
+  grid-template-columns: repeat(12, min(24px, 6vw));
+  grid-template-rows: repeat(12, min(24px, 6vw));
+  gap: 3px;
+}
+
+.cell {
+  background: #777;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(12px + 0.5vmin);
+  font-weight: bold;
+  color: black;
+  user-select: none;
+}
+
+.cell.active {
+  opacity: 0.4;
+}
+
+/* Lösung Button */
+#solutionBtn {
+  margin-top: 18px;
+  padding: 12px 26px;
+  font-size: 16px;
+  background: #00000000;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
 }
 </style>
 </head>
