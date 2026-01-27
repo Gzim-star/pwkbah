@@ -370,7 +370,7 @@ All challenges are deterministic and reproducible.
 
 <p>
 The system implements multiple game modes:
-Word Chain, Tic-Tac-Toe, Math Challenge, and Chromatic Trial —
+Word Chain, Tic-Tac-Toe, Math Challenge, Chromatic Trial and StatePuzzle
 each testing different cognitive abilities such as memory,
 pattern recognition, strategic planning, and rapid decision-making.
 </p>
@@ -432,6 +432,13 @@ are essential to advance.
       <li>Make all tiles the same color</li>
       <li>Focus on one color and act fast</li>
       <li>Or grid will reset</li>
+    </ul>
+  `;
+  
+    else if(stage === 'statepuzzel') tipText = `
+      <p>Statepuzzel Tips:</p>
+    <ul>
+      <li>Somewhere is the solution</li>
     </ul>
   `;
   tipModal.querySelector('p').innerHTML = tipText;
@@ -959,7 +966,7 @@ function startStatePuzzle(){
   container.innerHTML = `
     <div class="game-wrapper" id="statePuzzleWrapper">
       <div id="grid"></div>
-    <button id="solutionBtn">Lösung anzeigen</button>
+    <button id="solutionBtn">Solution</button>
     </div>
  `;
 
@@ -1009,7 +1016,7 @@ function initStatePuzzle(){
   const wrapper = document.getElementById("statePuzzleWrapper");
   solutionBtn.onclick = () => {
   alert(
-    "Klicke diese Zellen:\n" +
+    "Click these cells:\n" +
     solvePuzzle(state, size).join(", ")
   );
 };
