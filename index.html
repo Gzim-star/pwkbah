@@ -1006,6 +1006,7 @@ function solvePuzzle(state, size) {
 function initStatePuzzle(){
   const grid = document.getElementById("grid");
   const solutionBtn =document.getElementById("solutionBtn")
+  const wrapper = document.getElementById("statePuzzleWrapper");
   solutionBtn.onclick = () => {
   alert(
     "Klicke diese Zellen:\n" +
@@ -1057,9 +1058,10 @@ function initStatePuzzle(){
     if(state.every(v=>v===0)){
       solved = true;
       wrapper.classList.add("hide");
-      setTimeout(() => {
-        wrapper.style.display = "none";
-      },1300);
+
+setTimeout(() => {
+  wrapper.style.display = "none";
+}, 1300);
     
 
 
@@ -1069,7 +1071,7 @@ function initStatePuzzle(){
         // 🔑 UI-Sequenz wieder erlauben
         uiStarted = false;
         startUISequence();
-      }, 5000); // ⏱ nach 5 Sekunden zurück zum Start
+      }, 7000); // ⏱ nach 5 Sekunden zurück zum Start
     }
   }
 
